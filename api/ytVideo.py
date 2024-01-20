@@ -10,13 +10,13 @@ def main():
 	data = request.get_json()
 	video_url = data.get('video_url', '')
 
-	# options = {
-	#     'format': 'best',  # You can customize the format based on your needs
-	# }
+	options = {
+	    'format': 'best',  # You can customize the format based on your needs
+	}
 
-	options = {'extract_audio': True, 
-	'format': 'bestaudio', 
-	'outtmpl': '%(title)s.mp3'}
+	# options = {'extract_audio': True, 
+	# 'format': 'bestaudio', 
+	# 'outtmpl': '%(title)s.mp3'}
 
 	# options = {
 	# 	'format': 'bestaudio/best',
