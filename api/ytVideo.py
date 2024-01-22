@@ -10,8 +10,27 @@ def main():
 	data = request.get_json()
 	video_url = data.get('video_url', '')
 
-	options = {
-	    'format': 'best',  # You can customize the format based on your needs
+	videoOptions = {
+	  'format': '22',
+	}
+
+	audioOptions = {
+		'format' : '251',
+	}
+
+	with yt_dlp.YoutubeDL(videoOptions) as ydlVideo:
+		infoVideo = ydlVideo.extract_info(video_url, download=False)
+		# videoFormats = infoVideo.get('formats', [])
+		video_url = infoVideo.get('url', None)
+
+	with yt_dlp.YoutubeDL(audioOptions) as ydlAudio:
+		infoAudio = ydlAudio.extract_info(video_url, download=False)
+		# audioFormats = infoAudio.get('formats', [])
+		audio_url = infoAudio.get('url', None)
+		
+	response_data = {
+			'videoURL': video_url,
+			'audioURL' : audio_url 
 	}
 
 	# options = {'extract_audio': True, 
@@ -25,24 +44,14 @@ def main():
 	# 		'preferredcodec': 'mp3',  # or 'm4a' or any other audio format
 	# 		'preferredquality': '192',  # or another desired bitrate
 	# 	}],
-	# }
+	# 
 
-	with yt_dlp.YoutubeDL(options) as ydl:
-		info_dict = ydl.extract_info(video_url, download=False)
-		formats = info_dict.get('formats', [])
-		video_url = info_dict.get('url', None)
-		
-	response_data = {
-			'download_url': video_url,
-			'formats': []
-	}
-
-	for format in formats:
-		response_data['formats'].append({
-			'id':format['format_id'],
-			'Resolution': format['resolution'], 
-			'Format': format['format'],
-			'download_url': format['url']
-		})
+	# for format in formats:
+	# 	response_data['formats'].append({
+	# 		'id':format['format_id'],
+	# 		'Resolution': format['resolution'], 
+	# 		'Format': format['format'],
+	# 		'download_url': format['url']
+	# 	})
 
 	return jsonify(response_data)
